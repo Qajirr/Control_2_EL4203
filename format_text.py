@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 
 # Función para leer el archivo de texto
@@ -73,31 +74,62 @@ def format_text(file_path: str, maxWidth: int) -> list:
 
 
 # Función para guardar el texto formateado en un archivo
-def save_to_file(file_path: str, text_lines: list) -> None:
+def save_to_file(file_path, text_lines):
     with open(file_path, "w", encoding="utf-8") as file:
         for line in text_lines:
             file.write(line + "\n")
 
 
+# Función para crear un nuevo archivo
+def create_file(file_path):
+    with open(file_path, "w", encoding="utf-8") as file:
+        file.write("")
+
+
+# Función para leer el contenido de un archivo
+def read_file(file_path):
+    with open(file_path, "r", encoding="utf-8") as file:
+        print(file.read())
+
+
+# Función para actualizar un archivo existente
+def update_file(file_path, maxWidth):
+    formatted_text = format_text(file_path, maxWidth)
+    save_to_file(file_path, formatted_text)
+
+
+# Función para eliminar un archivo
+def delete_file(file_path):
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        print(f"El archivo {file_path} ha sido eliminado.")
+    else:
+        print(f"El archivo {file_path} no existe.")
+
+
+# Interfaz de usuario para seleccionar las opciones y procesar el archivo
 def main():
     print("Bienvenido al Justificador de Texto")
     print("Seleccione una opción:")
-    print("1. Crear un nuevo archivo con el texto formateado")
-    print("2. Modificar el archivo existente con el texto formateado")
+    print("1. Crear un nuevo archivo")
+    print("2. Leer un archivo existente")
+    print("3. Actualizar el archivo existente con el texto formateado")
+    print("4. Eliminar un archivo existente")
 
     option = input("Ingrese el número de la opción deseada: ")
     file_path = input("Ingrese la ruta del archivo de texto: ")
-    maxWidth = int(input("Ingrese el ancho máximo de caracteres por línea: "))
-
-    formatted_text = format_text(file_path, maxWidth)
 
     if option == "1":
-        new_file_path = input("Ingrese la ruta para guardar el nuevo archivo: ")
-        save_to_file(new_file_path, formatted_text)
-        print(f"El texto formateado ha sido guardado en {new_file_path}")
+        create_file(file_path)
+        print(f"El archivo {file_path} ha sido creado.")
     elif option == "2":
-        save_to_file(file_path, formatted_text)
-        print(f"El archivo {file_path} ha sido modificado con el texto formateado.")
+        read_file(file_path)
+    elif option == "3":
+        maxWidth = int(input("Ingrese el ancho máximo de caracteres por línea: "))
+        update_file(file_path, maxWidth)
+        print(f"El archivo {file_path} ha sido actualizado con el texto formateado.")
+    elif option == "4":
+        delete_file(file_path)
     else:
         print("Opción no válida. Inténtelo de nuevo.")
 
